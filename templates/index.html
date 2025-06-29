@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoDraw - P&ID Instrument Extractor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Basic spinner CSS - You can customize this or use a library */
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            display: none; /* Hidden by default */
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #processingMessage {
+            text-align: center;
+            font-size: 1.1em;
+            color: #555;
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        /* Styling for the header with logo and app name */
+        #header {
+            display: flex; /* Use flexbox for horizontal layout */
+            justify-content: space-between; /* Puts items at opposite ends */
+            align-items: center; /* Vertically centers items */
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        #header .app-name {
+            color: #333;
+            font-size: 2.2em; /* Slightly larger for app name */
+            margin: 0; /* Remove default margin */
+            font-weight: bold;
+        }
+
+        #header .logo {
+            max-width: 150px; /* Adjust logo size as needed */
+            height: auto;
+        }
+
+        /* Styling for the footer developer info */
+        footer {
+            margin-top: 50px; /* Space from content above */
+            text-align: right; /* Align text to the right */
+            padding: 20px 0;
+            font-size: 0.85em; /* Small font size */
+            color: #777; /* Softer color */
+        }
+
+        .developer-info {
+            line-height: 1.4; /* Improve readability for multi-line text */
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="header">
+            <h1 class="app-name">AutoDraw</h1>
+            <img src="{{ url_for('static', filename='bilfinger_logo.png') }}" alt="Bilfinger Logo" class="logo">
+        </div>
+
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="pid_file">Upload P&ID PDF:</label>
+                <input type="file" id="pid_file" name="pid_file" accept=".pdf" multiple required>
+            </div>
+            <div class="form-group">
+                <label for="legend_file">Upload Instrument Legend (Excel/CSV):</label>
+                <input type="file" id="legend_file" name="legend_file" accept=".xlsx,.xls,.csv">
+            </div>
+            <button type="submit" id="submitButton">Process P&ID</button>
+        </form>
+
+        <div id="processingMessage">
+            <div class="loader"></div>
+            <p>Processing P&ID... This may take a few moments. Please do not close this window.</p>
+        </div>
+
+        {% if message %}
+            <div class="message {% if error %}error{% else %}success{% endif %}">
+                <p>{{ message }}</p>
+                {% if output_file %}
+                    <p><a href="{{ url_for('uploaded_file', filename=output_file) }}">Download Processed Data</a></p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <footer style="text-align: left;">
+        <p class="developer-info">
+            Developed by<br>
+            Prashanth Thipparthi<br>
+            Senior Engineer<br>
+            Instrumentation Department<br>
+            Bilfinger Tebodin Middle East
+        </p>
+    </footer>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            // Show the processing message and spinner when the form is submitted
+            document.getElementById('processingMessage').style.display = 'block';
+            document.querySelector('.loader').style.display = 'block';
+            // Disable the submit button to prevent multiple submissions
+            document.getElementById('submitButton').disabled = true;
+            document.getElementById('submitButton').textContent = 'Processing...'; // Change button text
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding in width */
+    background-color: #f9f9f9;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+.messages {
+    margin-top: 25px;
+    padding: 10px;
+    background-color: #ffe0b2; /* Light orange for warnings/info */
+    border: 1px solid #ffcc80;
+    border-radius: 4px;
+    color: #e65100; /* Darker orange text */
+    text-align: center;
+}
+
+.messages ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.messages li {
+    margin-bottom: 5px;
+}
+
+.instructions {
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    padding-top: 30px;
+}
+
+.instructions h2, .instructions h3 {
+    color: #0056b3;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.instructions ol {
+    margin-bottom: 20px;
+    padding-left: 25px;
+}
+
+.instructions ol li {
+    margin-bottom: 10px;
+}
+
+.legend-example {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.legend-example th, .legend-example td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.legend-example th {
+    background-color: #f2f2f2;
+    color: #333;
+}
