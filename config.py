@@ -1,53 +1,52 @@
 import os
 
 # --- Google Cloud Vision API Configuration ---
-# IMPORTANT: Replace with the actual FULL PATH to your Google Service Account JSON key file
-# Examples:
-# Windows: r"C:\path\to\your\service-account-key.json"
-# Linux/macOS: "/home/youruser/path/to/your/service-account-key.json"
-# The 'r' before the string on Windows means "raw string" and helps with backslashes.
-#GOOGLE_APPLICATION_CREDENTIALS_PATH = r"C:\Instrument Extractor\pro-sylph-460317-k6-72abff84fb8a.json"
+# IMPORTANT: Replace with the actual path to your Google Cloud service account key JSON file
 GOOGLE_APPLICATION_CREDENTIALS_PATH = "/Users/prashanththipparthi/Auto_Draw/autodraw-464410-92725d562783.json"
+
 # --- Poppler Path Configuration ---
-# IMPORTANT: Replace with the actual FULL PATH to the 'bin' directory of your Poppler installation
-# On Windows, this is usually something like: r"C:\path\to\poppler\po3.10\Library\bin"
-# On macOS/Linux, if you installed via brew/apt, it's often not needed as it's in your PATH.
-# If you get 'pdfinfo' or 'pdftocairo' not found errors, specify it here.
-POPPLER_PATH = r"/opt/homebrew/opt/poppler/bin" # <-- UPDATE THIS LINE!
+# IMPORTANT: Update this line with the correct path to your Poppler bin directory
+# On macOS with Homebrew, it's typically /opt/homebrew/opt/poppler/bin
+# On Windows, it would be the path to the 'bin' folder within your Poppler installation (e.g., r"C:\path\to\poppler\bin")
+POPPLER_PATH = r"/opt/homebrew/opt/poppler/bin" 
 
 # --- Flask App Configuration ---
-UPLOAD_FOLDER = 'uploads' # Temporary folder for uploads (Flask handles cleanup for request.files)
-ALLOWED_EXTENSIONS = {'pdf', 'xlsx', 'csv'} # File types allowed for upload
-# IMPORTANT: Change this to a strong, random key in production! It's for security.
-SECRET_KEY = 'AIzaSyBh4I3rfb1AHjHkgVu4ZBUC4g2LbymQ194'
+UPLOAD_FOLDER = 'uploads' 
+ALLOWED_EXTENSIONS = {'pdf', 'xlsx', 'csv'} 
+SECRET_KEY = 'AIzaSyBh4I3rfb1AHjHkgVu4ZBUC4g2LbymQ194' # Replace with a strong, unique secret key
 
-# --- OpenCV HoughCircles Parameters ---
-# These parameters are crucial for finding circles on your P&IDs.
-# You might need to change these numbers later if the app doesn't find circles well.
-# Briefly:
-# dp: Controls how accurately the circle centers are located. 1 is good.
-# minDist: Minimum distance allowed between the centers of two detected circles. Prevents many circles for one.
-# param1: Higher threshold for the Canny edge detector (used internally).
-# param2: Accumulator threshold. Smaller values find more circles (even weak ones), larger values find fewer but stronger ones.
-# minRadius, maxRadius: The smallest and largest circle sizes to look for.
+# --- OpenCV HoughCircles Parameters (Broad Defaults for Initial Scan) ---
+# These are used for the broad initial search in Level 1 to find anchor circles
 HOUGH_DP = 1        
 HOUGH_MIN_DIST = 50 
 HOUGH_PARAM1 = 100  
-HOUGH_PARAM2 = 30   
-HOUGH_MIN_RADIUS = 20 
-HOUGH_MAX_RADIUS = 60 
+HOUGH_PARAM2 = 15   
+HOUGH_MIN_RADIUS = 10  # Broad minimum, to capture potentially very small circles
+HOUGH_MAX_RADIUS = 100 # Broad maximum, to capture potentially very large circles
 
 # --- Image Processing Parameters ---
-PDF_DPI = 300 # DPI (Dots Per Inch) for converting PDF to image. Higher DPI = better OCR, but slower.
-# Multiplier for circle radius to define the box size for OCR.
-# A value of 1.5 means the box will be 1.5 times the radius on each side of the center.
-OCR_ROI_MARGIN_FACTOR = 1.8 
+PDF_DPI = 300 # Dots per inch for PDF conversion (higher DPI means better OCR, but slower processing)
+OCR_ROI_MARGIN_FACTOR = 1.8 # Multiplier for radius to define the OCR ROI (e.g., 1.5x the radius)
 
 # --- Text processing parameters ---
-TEXT_CONCAT_SEPARATOR = '-' # Separator for joining text parts within a circle (e.g., P-573P-01)
+TEXT_CONCAT_SEPARATOR = '-' # Separator for combining lines of text in an instrument tag
 
 # --- Debugging Configuration ---
-# Set to True to enable saving intermediate images and OCR outputs for debugging
-DEBUG_MODE = True
-# Folder to save debug outputs. This will be created inside your Auto_Draw project.
+DEBUG_MODE = True # Set to False to disable debug output
 DEBUG_OUTPUT_FOLDER = 'debug_outputs'
+
+# --- Dynamic Radius Calibration Parameters for Level 1 ---
+ANCHOR_MIN_COUNT = 1 # The minimum number of suitable circles needed to determine a dynamic radius
+RADIUS_TOLERANCE_PERCENT = 0.15 # +/- 15% from the average radius for the dynamic range (e.g., 0.15 for +/-15%)
+
+# --- Grid-based Search Parameters for Level 1 Calibration ---
+PID_GRID_ROWS = 4 # Number of rows to divide the P&ID image into
+PID_GRID_COLS = 5 # Number of columns to divide the P&ID image into
+# This defines the order in which grid parts (1-indexed) are searched for anchor circles.
+# The idea is to prioritize central areas where instruments are more commonly placed.
+PID_SEARCH_ORDER = [
+    7, 8, 9, 13, 12, # Core central zones (e.g., parts in rows 2 & 3, columns 2-4)
+    6, 10, 11, 14, 15, # Adjacent central zones
+    2, 3, 4, 1, 5,    # Top row
+    17, 18, 19, 16, 20 # Bottom row
+]
