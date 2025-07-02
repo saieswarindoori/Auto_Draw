@@ -2,13 +2,17 @@ import os
 
 # --- Google Cloud Vision API Configuration ---
 # IMPORTANT: Replace with the actual path to your Google Cloud service account key JSON file
-GOOGLE_APPLICATION_CREDENTIALS_PATH = "/Users/prashanththipparthi/Auto_Draw/autodraw-464410-92725d562783.json"
+GOOGLE_APPLICATION_CREDENTIALS_PATH = r"C:\Users\idm280865\Desktop\Working\Auto_Draw\autodraw-464410-92725d562783.json"
+
 
 # --- Poppler Path Configuration ---
 # IMPORTANT: Update this line with the correct path to your Poppler bin directory
 # On macOS with Homebrew, it's typically /opt/homebrew/opt/poppler/bin
 # On Windows, it would be the path to the 'bin' folder within your Poppler installation (e.g., r"C:\path\to\poppler\bin")
-POPPLER_PATH = r"/opt/homebrew/opt/poppler/bin" 
+
+
+POPPLER_PATH = r"C:\Users\idm280865\poppler-24.02.0\poppler-24.02.0\Library\bin"
+
 
 # --- Flask App Configuration ---
 UPLOAD_FOLDER = 'uploads' 
@@ -20,9 +24,21 @@ SECRET_KEY = 'AIzaSyBh4I3rfb1AHjHkgVu4ZBUC4g2LbymQ194' # Replace with a strong, 
 HOUGH_DP = 1        
 HOUGH_MIN_DIST = 50 
 HOUGH_PARAM1 = 100  
-HOUGH_PARAM2 = 15   
+HOUGH_PARAM2 = 30  
 HOUGH_MIN_RADIUS = 10  # Broad minimum, to capture potentially very small circles
 HOUGH_MAX_RADIUS = 100 # Broad maximum, to capture potentially very large circles
+
+# config.py
+
+# ... (previous configurations) ...
+
+# OCR Validation Parameters for Instrument Tags
+OCR_MIN_CHARS_PER_ROW = 2  # Minimum characters expected per line of an instrument tag
+OCR_MAX_CHARS_PER_ROW = 5  # Maximum characters expected per line of an instrument tag
+OCR_MAX_TAG_ROWS = 4       # Maximum number of lines (rows) expected in an instrument tag
+OCR_Y_TOLERANCE = 5        # Y-axis tolerance for grouping OCR text into lines (in pixels)
+
+# ... (rest of your config.py) ...
 
 # --- Image Processing Parameters ---
 PDF_DPI = 300 # Dots per inch for PDF conversion (higher DPI means better OCR, but slower processing)
