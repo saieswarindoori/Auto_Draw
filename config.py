@@ -42,7 +42,7 @@ OCR_Y_TOLERANCE = 5        # Y-axis tolerance for grouping OCR text into lines (
 
 # --- Image Processing Parameters ---
 PDF_DPI = 300 # Dots per inch for PDF conversion (higher DPI means better OCR, but slower processing)
-OCR_ROI_MARGIN_FACTOR = 1.8 # Multiplier for radius to define the OCR ROI (e.g., 1.5x the radius)
+OCR_ROI_MARGIN_FACTOR = 1 # Multiplier for radius to define the OCR ROI (e.g., 1.5x the radius)
 
 # --- Text processing parameters ---
 TEXT_CONCAT_SEPARATOR = '-' # Separator for combining lines of text in an instrument tag
