@@ -2,7 +2,7 @@ import os
 
 # --- Google Cloud Vision API Configuration ---
 # IMPORTANT: Replace with the actual path to your Google Cloud service account key JSON file
-GOOGLE_APPLICATION_CREDENTIALS_PATH = r"C:\Users\idm280865\Desktop\Working\Auto_Draw\autodraw-464410-92725d562783.json"
+GOOGLE_APPLICATION_CREDENTIALS_PATH = r"C:\Users\idm280865\OneDrive - Bilfinger\Desktop\Working\Auto_Draw\autodraw-464410-92725d562783.json"
 
 
 # --- Poppler Path Configuration ---
