@@ -2,7 +2,7 @@ import os
 
 # --- Google Cloud Vision API Configuration ---
 # IMPORTANT: Replace with the actual path to your Google Cloud service account key JSON file
-GOOGLE_APPLICATION_CREDENTIALS_PATH = r"C:\Users\idm280865\Desktop\Working\Auto_Draw\autodraw-464410-92725d562783.json"
+GOOGLE_APPLICATION_CREDENTIALS_PATH = r"C:\Users\idm280865\OneDrive - Bilfinger\Desktop\Working\Auto_Draw\autodraw-464410-3cb4dae6350d.json"
 
 
 # --- Poppler Path Configuration ---
@@ -17,7 +17,7 @@ POPPLER_PATH = r"C:\Users\idm280865\poppler-24.02.0\poppler-24.02.0\Library\bin"
 # --- Flask App Configuration ---
 UPLOAD_FOLDER = 'uploads' 
 ALLOWED_EXTENSIONS = {'pdf', 'xlsx', 'csv'} 
-SECRET_KEY = 'AIzaSyBh4I3rfb1AHjHkgVu4ZBUC4g2LbymQ194' # Replace with a strong, unique secret key
+SECRET_KEY = 'AIzaSyCAbSXGwvYBJD2lHVp8bYhFo9DmtRD22R4' # Replace with a strong, unique secret key
 
 # --- OpenCV HoughCircles Parameters (Broad Defaults for Initial Scan) ---
 # These are used for the broad initial search in Level 1 to find anchor circles

@@ -3,11 +3,12 @@ import os
 import pandas as pd
 import numpy as np
 from pdf2image import convert_from_bytes
-from google.cloud import vision
+from api_client import GoogleVisionClient
 from PIL import Image, ImageDraw, ImageFont
 import io
 import math
 import cv2 # <--- ADDED THIS IMPORT
+Image.MAX_IMAGE_PIXELS = None
 
 # Import configuration settings
 from config import (
@@ -30,7 +31,7 @@ class InstrumentProcessor:
         # Set Google Cloud credentials environment variable
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = GOOGLE_APPLICATION_CREDENTIALS_PATH
         # Initialize Google Cloud Vision client
-        self.vision_client = vision.ImageAnnotatorClient()
+        self.vision_client = GoogleVisionClient().client
         print("Google Vision Client initialized successfully.")
 
         # Set Poppler path for PDF conversion
