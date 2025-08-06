@@ -3,31 +3,58 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AutoDraw - Advanced P&ID Processing Suite</title>
+    <title>AutoDraw - Advanced Drawing Processing Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Modern CSS Variables */
+        /* Modern CSS Variables for a professional look */
         :root {
-            --primary-blue: #1e40af;
-            --primary-indigo: #4338ca;
+            /* Premium Color Palette */
+            --primary-blue: #0066ff;
+            --primary-indigo: #6366f1;
+            --primary-purple: #8b5cf6;
             --secondary-slate: #64748b;
             --success-emerald: #059669;
             --success-light: #d1fae5;
             --error-red: #dc2626;
             --error-light: #fee2e2;
-            --slate-50: #f8fafc;
-            --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0;
-            --slate-600: #475569;
-            --slate-700: #334155;
-            --slate-800: #1e293b;
-            --white: #ffffff;
+            --warning-amber: #f59e0b;
+            
+            /* Neutral Palette */
+            --neutral-50: #fafafa;
+            --neutral-100: #f5f5f5;
+            --neutral-200: #e5e5e5;
+            --neutral-300: #d4d4d4;
+            --neutral-400: #a3a3a3;
+            --neutral-500: #737373;
+            --neutral-600: #525252;
+            --neutral-700: #404040;
+            --neutral-800: #262626;
+            --neutral-900: #171717;
+            
+            /* Surface Colors */
+            --surface-primary: #ffffff;
+            --surface-secondary: #f8fafc;
+            --surface-tertiary: #f1f5f9;
+            --surface-elevated: rgba(255, 255, 255, 0.95);
+            
+            /* App Specific */
+            --app-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --app-border: #e5e7eb;
+            --app-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            
+            /* Border Radius */
             --border-radius-3xl: 1.5rem;
             --border-radius-2xl: 1rem;
             --border-radius-xl: 0.75rem;
+            --border-radius-lg: 0.5rem;
+            --border-radius-md: 0.375rem;
         }
 
+        /* Global reset and font */
         * {
             margin: 0;
             padding: 0;
@@ -35,15 +62,18 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
-            color: var(--slate-800);
-            background: linear-gradient(135deg, var(--slate-50) 0%, #dbeafe 50%, #e0e7ff 100%);
-            min-height: 100vh;
-            position: relative;
+            color: var(--neutral-800);
+            background: var(--app-bg);
+            height: 100vh;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: hidden;
         }
 
-        /* Background Pattern */
+        /* Enhanced background pattern */
         body::before {
             content: '';
             position: fixed;
@@ -51,271 +81,357 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.3) 1px, transparent 0);
-            background-size: 20px 20px;
-            opacity: 0.4;
+            background-image: 
+                radial-gradient(circle at 30px 30px, rgba(99, 102, 241, 0.08) 2px, transparent 0),
+                radial-gradient(circle at 80px 80px, rgba(139, 92, 246, 0.06) 1px, transparent 0);
+            background-size: 120px 120px, 60px 60px;
+            opacity: 0.7;
             pointer-events: none;
             z-index: 1;
         }
 
-        .main-container {
+        /* Main application container with border */
+        .app-container {
             position: relative;
             z-index: 10;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+            width: 100vw;
+            height: 100vh;
+            background: var(--surface-elevated);
+            backdrop-filter: blur(20px);
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        /* Header Section */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            height: calc(100vh - 120px); /* Account for footer */
+            overflow: hidden;
+        }
+
+        /* Enhanced Header Section */
         .header-section {
-            background: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, var(--surface-primary), var(--surface-secondary));
             backdrop-filter: blur(20px);
-            border-radius: var(--border-radius-3xl);
-            box-shadow: var(--shadow-xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--neutral-200);
+            padding: 1.25rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 1.25rem;
+            position: relative;
+            flex-shrink: 0;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
         .logo-icon {
-            width: 4rem;
-            height: 4rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
-            border-radius: var(--border-radius-2xl);
+            width: 5rem;
+            height: 5rem;
+            border-radius: var(--border-radius-xl);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: var(--shadow-lg);
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .logo-icon svg {
+            width: 65%;
+            height: 65%;
+            fill: currentColor;
         }
 
         .header-title {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin: 0;
+            letter-spacing: -0.025em;
         }
 
         .header-subtitle {
             color: var(--secondary-slate);
-            font-size: 1.125rem;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
             margin: 0;
         }
 
-        .company-logo {
-            width: 6rem;
-            height: 6rem;
-            background: linear-gradient(135deg, var(--slate-100), var(--slate-200));
-            border-radius: var(--border-radius-2xl);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            color: var(--secondary-slate);
-            font-weight: bold;
-            font-size: 0.875rem;
+        .company-logo-img {
+            height: 3rem;
+            width: auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
         }
 
-        /* Modules Dashboard */
-        .modules-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .module-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-radius: var(--border-radius-3xl);
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow-xl);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .module-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .module-card.active {
-            border: 2px solid var(--primary-blue);
-        }
-
-        .module-card.coming-soon {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background: rgba(255, 255, 255, 0.6);
-        }
-
-        .module-card.coming-soon:hover {
-            transform: none;
-            box-shadow: var(--shadow-xl);
-        }
-
-        .module-icon {
-            width: 3.5rem;
-            height: 3.5rem;
-            border-radius: var(--border-radius-2xl);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            box-shadow: var(--shadow-lg);
-            color: white;
-            font-size: 1.75rem;
-            transition: all 0.3s ease;
-        }
-
-        .module-card.active .module-icon {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        }
-
-        .module-card.coming-soon .module-icon {
-            background: linear-gradient(135deg, var(--secondary-slate), var(--slate-600));
-        }
-
-        .module-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--slate-800);
-        }
-
-        .module-card.coming-soon .module-title {
-            color: var(--secondary-slate);
-        }
-
-        .module-description {
-            color: var(--secondary-slate);
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-
-        .module-action {
-            display: flex;
-            align-items: center;
-            color: var(--primary-blue);
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        .coming-soon-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        /* Message Styles */
+        /* Enhanced Message Styles */
         .message {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            border-radius: var(--border-radius-2xl);
-            border: 1px solid;
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-xl);
+            border: 2px solid;
             backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
             font-weight: 600;
-            font-size: 1.125rem;
+            font-size: 0.95rem;
             animation: slideInFromTop 0.5s ease-out;
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
         }
 
         .message.success {
-            background: rgba(209, 250, 229, 0.8);
-            border-color: #10b981;
+            background: linear-gradient(135deg, rgba(209, 250, 229, 0.9), rgba(167, 243, 208, 0.8));
+            border-color: var(--success-emerald);
             color: #065f46;
         }
 
         .message.error {
-            background: rgba(254, 226, 226, 0.8);
-            border-color: #ef4444;
+            background: linear-gradient(135deg, rgba(254, 226, 226, 0.9), rgba(252, 165, 165, 0.8));
+            border-color: var(--error-red);
             color: #991b1b;
         }
 
         .message-icon {
             width: 1.5rem;
             height: 1.5rem;
+            flex-shrink: 0;
         }
 
-        /* Form Styles */
-        .upload-form {
-            background: rgba(255, 255, 255, 0.9);
+        /* Enhanced Modules Dashboard */
+        .modules-dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-grow: 1;
+            align-items: center;
+            overflow: hidden;
+            padding: 0.5rem;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, var(--surface-primary), var(--surface-secondary));
             backdrop-filter: blur(20px);
-            border-radius: var(--border-radius-3xl);
-            box-shadow: var(--shadow-xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            padding: 2rem 1.75rem;
+            border: 2px solid var(--neutral-200);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            flex: 1 1 calc(50% - 1rem);
+            max-width: 400px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-indigo));
+            opacity: 0;
+        }
+
+        .module-card.coming-soon {
+            opacity: 0.75;
+            cursor: not-allowed;
+            filter: grayscale(60%);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+
+        .module-card .module-icon {
+            width: 4.5rem;
+            height: 4.5rem;
+            border-radius: var(--border-radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            color: white;
+            font-size: 2.25rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .module-card.coming-soon .module-icon {
+            background: linear-gradient(135deg, var(--neutral-400), var(--neutral-600));
+        }
+
+        .module-card .module-icon svg {
+            width: 60%;
+            height: 60%;
+            fill: currentColor;
+        }
+
+        .module-card .module-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--neutral-800);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.025em;
+        }
+
+        .module-card.coming-soon .module-title {
+            background: none;
+            -webkit-text-fill-color: var(--neutral-700);
+            color: var(--neutral-700);
+        }
+
+        .module-card .module-description {
+            color: var(--secondary-slate);
+            line-height: 1.6;
+            font-family: 'DM Sans', sans-serif;
             margin-bottom: 2rem;
+            font-size: 1rem;
+            max-width: 90%;
+        }
+
+        .module-card .module-action-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .module-card .module-action-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .coming-soon-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--warning-amber), #d97706);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Enhanced Form Styles */
+        .upload-form {
+            background: linear-gradient(135deg, var(--surface-primary), var(--surface-secondary));
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 2px solid var(--neutral-200);
+            padding: 2rem;
+            flex-shrink: 0;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .form-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.75rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
             text-align: center;
-            margin-bottom: 2rem;
-            color: var(--slate-800);
+            margin-bottom: 1.5rem;
+            color: var(--neutral-800);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.025em;
+        }
+
+        .processing-description {
+            color: var(--secondary-slate);
+            font-family: 'DM Sans', sans-serif;
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.6;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
+            width: 100%;
         }
 
         .form-label {
             display: block;
-            font-size: 1.125rem;
+            font-size: 1rem;
             font-weight: 600;
-            color: var(--slate-700);
-            margin-bottom: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--neutral-700);
+            margin-bottom: 0.75rem;
         }
 
         .file-input-wrapper {
             position: relative;
-            group: true;
         }
 
         .file-input {
             display: block;
             width: 100%;
-            padding: 1.5rem;
-            border: 2px dashed var(--slate-200);
-            border-radius: var(--border-radius-2xl);
-            background: rgba(248, 250, 252, 0.5);
+            padding: 1rem 1.25rem;
+            border: 2px dashed var(--neutral-300);
+            border-radius: var(--border-radius-lg);
+            background: var(--surface-secondary);
             transition: all 0.3s ease;
             font-size: 1rem;
-            color: var(--slate-700);
+            color: var(--neutral-700);
+            height: auto;
+            min-height: 55px;
+            cursor: pointer;
         }
 
         .file-input:hover {
             border-color: var(--primary-blue);
-            background: rgba(248, 250, 252, 0.8);
+            background: var(--surface-tertiary);
+            box-shadow: var(--shadow-md);
         }
 
         .file-input:focus {
@@ -329,10 +445,10 @@
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
             color: white;
             font-weight: 700;
-            padding: 1.5rem 2rem;
-            border: none;
-            border-radius: var(--border-radius-2xl);
-            font-size: 1.125rem;
+            padding: 1rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius-lg);
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
@@ -340,15 +456,18 @@
             justify-content: center;
             gap: 0.75rem;
             box-shadow: var(--shadow-lg);
+            height: auto;
+            min-height: 55px;
         }
 
         .submit-button:hover:not(:disabled) {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .submit-button:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
@@ -358,89 +477,75 @@
             height: 1.5rem;
         }
 
-        /* Processing Indicator */
+        /* Enhanced Processing Indicator */
         .processing-indicator {
             display: none;
-            background: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--surface-primary), var(--surface-secondary));
+            border-radius: var(--border-radius-xl);
+            border: 2px solid var(--neutral-200);
+            box-shadow: var(--shadow-lg);
+            color: var(--neutral-800);
+            font-size: 1rem;
+            font-weight: 600;
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progress-bar-container {
+            width: 80%;
+            height: 8px;
+            background-color: var(--neutral-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1.5rem auto;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar-indeterminate {
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-indigo));
+            border-radius: 4px;
+            position: absolute;
+            left: -30%;
+            animation: indeterminate-progress 2s infinite ease-in-out;
+        }
+
+        .processing-image-placeholder img {
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            margin: 1rem 0;
+        }
+
+        /* Enhanced Results Section */
+        .results-section {
+            display: none;
+            background: linear-gradient(135deg, var(--surface-primary), var(--surface-secondary));
             backdrop-filter: blur(20px);
-            border-radius: var(--border-radius-3xl);
+            border-radius: var(--border-radius-xl);
             box-shadow: var(--shadow-xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid var(--neutral-200);
             padding: 2rem;
             text-align: center;
-            margin-bottom: 2rem;
             animation: slideInFromBottom 0.5s ease-out;
-        }
-
-        .processing-icon {
-            width: 4rem;
-            height: 4rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
+            flex-grow: 1;
+            flex-direction: column;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            box-shadow: var(--shadow-lg);
-            animation: spin 2s linear infinite;
-        }
-
-        .processing-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--slate-800);
-            margin-bottom: 1rem;
-        }
-
-        .processing-description {
-            color: var(--secondary-slate);
-            margin-bottom: 1.5rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 0.75rem;
-            background: var(--slate-200);
-            border-radius: 9999px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
-            border-radius: 9999px;
+            align-items: center;
             position: relative;
             overflow: hidden;
-            animation: indeterminateProgress 2s ease-in-out infinite;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 1.5s ease-in-out infinite;
-        }
-
-        /* Results Section */
-        .results-section {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-radius: var(--border-radius-3xl);
-            box-shadow: var(--shadow-xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2rem;
-            text-align: center;
-            animation: slideInFromBottom 0.5s ease-out;
         }
 
         .results-icon {
-            width: 4rem;
-            height: 4rem;
+            width: 3.5rem;
+            height: 3.5rem;
             background: linear-gradient(135deg, var(--success-emerald), #10b981);
             border-radius: 50%;
             display: flex;
@@ -449,14 +554,17 @@
             margin: 0 auto 1.5rem;
             box-shadow: var(--shadow-lg);
             color: white;
-            font-size: 2rem;
+            font-size: 1.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .results-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--slate-800);
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--neutral-800);
             margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
         }
 
         .download-buttons {
@@ -464,6 +572,7 @@
             flex-direction: column;
             gap: 1rem;
             align-items: center;
+            margin-bottom: 1.5rem;
         }
 
         @media (min-width: 640px) {
@@ -473,81 +582,141 @@
             }
         }
 
-        .download-link {
+        .download-link, .back-button {
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
             background: linear-gradient(135deg, var(--success-emerald), #10b981);
             color: white;
             text-decoration: none;
-            font-weight: 600;
-            padding: 1rem 2rem;
-            border-radius: var(--border-radius-2xl);
+            font-weight: 700;
+            padding: 1rem 1.75rem;
+            border-radius: var(--border-radius-lg);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: var(--shadow-lg);
+            font-size: 0.95rem;
+            border: 2px solid transparent;
+            cursor: pointer;
         }
 
-        .download-link:hover {
+        .download-link:hover, .back-button:hover {
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.3);
             text-decoration: none;
             color: white;
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .download-link.debug {
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-indigo));
         }
 
-        /* Footer */
+        .back-button {
+            background: linear-gradient(135deg, var(--slate-600), var(--slate-700));
+        }
+
+        /* Enhanced Table styling */
+        .results-table-container {
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid var(--neutral-200);
+            border-radius: var(--border-radius-lg);
+            margin-top: 1.5rem;
+            box-shadow: var(--shadow-md);
+            background: var(--surface-primary);
+        }
+
+        .results-section table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            min-width: 600px;
+        }
+
+        .results-section th, .results-section td {
+            border: 1px solid var(--neutral-200);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        .results-section th {
+            background: linear-gradient(135deg, var(--neutral-100), var(--neutral-50));
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            color: var(--neutral-800);
+        }
+
+        .results-section tr:nth-child(even) {
+            background-color: var(--neutral-50);
+        }
+
+        .results-section tr:hover {
+            background-color: rgba(0, 102, 255, 0.05);
+        }
+
+        /* Enhanced Footer */
         .footer {
-            background: rgba(255, 255, 255, 0.6);
+            background: linear-gradient(135deg, var(--surface-secondary), var(--surface-tertiary));
             backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            margin-top: 4rem;
-            padding: 3rem 2rem;
+            border-top: 2px solid var(--neutral-200);
+            padding: 1rem 1.5rem;
             text-align: center;
+            flex-shrink: 0;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .footer-icon {
-            width: 3rem;
-            height: 3rem;
-            background: linear-gradient(135deg, var(--slate-600), var(--slate-700));
-            border-radius: var(--border-radius-xl);
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--neutral-600), var(--neutral-700));
+            border-radius: var(--border-radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
+            margin: 0 auto 0.5rem;
             box-shadow: var(--shadow-lg);
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-icon svg {
+            width: 60%;
+            height: 60%;
+            fill: currentColor;
         }
 
         .footer-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--slate-800);
-            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--neutral-700);
+            margin-bottom: 0.1rem;
         }
 
         .footer-content {
-            color: var(--secondary-slate);
-            line-height: 1.6;
+            color: var(--neutral-600);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.75rem;
+            line-height: 1.2;
         }
 
         .footer-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--slate-800);
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-position {
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--neutral-800);
         }
 
         .footer-company {
-            font-weight: 600;
+            font-weight: 500;
+            font-family: 'Space Grotesk', sans-serif;
             color: var(--primary-blue);
         }
 
@@ -574,227 +743,445 @@
             }
         }
 
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes indeterminateProgress {
-            0% {
-                transform: translateX(-100%);
-            }
-            50% {
-                transform: translateX(0%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+        @keyframes indeterminate-progress {
+            0% { left: -30%; }
+            50% { left: 100%; }
+            100% { left: -30%; }
         }
 
         /* Responsive Design */
+        @media (max-width: 900px) {
+            .module-card {
+                flex: 1 1 100%;
+                max-width: 450px;
+            }
+        }
+
         @media (max-width: 768px) {
             .main-container {
                 padding: 1rem;
+                gap: 1rem;
             }
 
             .header-section {
-                flex-direction: column;
-                text-align: center;
+                padding: 1rem 1.25rem;
             }
 
             .header-title {
+                font-size: 1.75rem;
+            }
+
+            .header-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .logo-icon {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.25rem;
+            }
+
+            .company-logo-img {
+                height: 2.5rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .upload-form, .processing-indicator, .results-section, .modules-dashboard {
+                padding: 1.5rem;
+            }
+
+            .module-card {
+                padding: 1.5rem;
+                min-height: 280px;
+            }
+
+            .module-card .module-icon {
+                width: 4rem;
+                height: 4rem;
                 font-size: 2rem;
             }
 
-            .modules-dashboard {
-                grid-template-columns: 1fr;
+            .module-card .module-title {
+                font-size: 1.5rem;
             }
 
-            .company-logo {
-                width: 4rem;
-                height: 4rem;
+            .results-table-container {
+                max-height: 150px;
+            }
+
+            .footer {
+                padding: 1rem;
+                height: 80px;
+            }
+        }
+
+        @media (max-height: 800px) {
+            .main-container {
+                padding: 1rem 1.5rem;
+                gap: 1.25rem;
+            }
+
+            .header-section {
+                padding: 1rem 1.5rem;
+            }
+
+            .module-card {
+                min-height: 260px;
+                padding: 1.5rem;
+            }
+
+            .results-table-container {
+                max-height: 120px;
+            }
+
+            .footer {
+                padding: 1rem;
+                height: 75px;
             }
         }
     </style>
   </head>
   <body>
-    <div class="main-container">
-      <!-- Header Section -->
-      <div class="header-section">
-        <div class="header-left">
-          <div class="logo-icon">⚡</div>
-          <div>
-            <h1 class="header-title">AutoDraw</h1>
-            <p class="header-subtitle">Advanced P&ID Processing Suite</p>
-          </div>
-        </div>
-        <div class="company-logo">
-          LOGO
-        </div>
-      </div>
-
-      <!-- Modules Dashboard -->
-      <div class="modules-dashboard">
-        <div class="module-card active" onclick="document.getElementById('uploadForm').scrollIntoView({behavior: 'smooth'})">
-          <div class="module-icon">📄</div>
-          <h3 class="module-title">P&ID Instrument Extraction</h3>
-          <p class="module-description">Extract and analyze instruments from your P&ID PDF files with advanced AI processing</p>
-          <div class="module-action">
-            Get Started →
-          </div>
-        </div>
-        
-        <div class="module-card coming-soon">
-          <div class="module-icon">🔌</div>
-          <h3 class="module-title">Cable Extractor</h3>
-          <p class="module-description">Advanced cable extraction and analysis tools</p>
-          <div class="coming-soon-badge">
-            <span>⏳</span>
-            Coming Soon
-          </div>
-        </div>
-      </div>
-
-      <!-- Message Display -->
-      {% if message %}
-        <div class="message {% if error %}error{% else %}success{% endif %}">
-          <div class="message-icon">
-            {% if error %}❌{% else %}✅{% endif %}
-          </div>
-          {{ message }}
-        </div>
-      {% endif %}
-
-      <!-- Upload Form -->
-      <div class="upload-form">
-        <h2 class="form-title">Upload Your P&ID Files</h2>
-        
-        <form id="uploadForm" method="post" action="/upload" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="pid_file" class="form-label">P&ID Files (PDF, Max 50 files)</label>
-            <div class="file-input-wrapper">
-              <input type="file" name="pid_file" id="pid_file" accept=".pdf" multiple required class="file-input">
+    <div class="app-container">
+      <div class="main-container">
+        <!-- Header Section -->
+        <div class="header-section">
+          <div class="header-left">            
+            <div class="logo-icon">
+                <img src="/static/AutoDraw_icon.png" alt="AutoDraw Icon" style="max-width: 75%; max-height: 75%; object-fit: contain;">
+            </div>
+            <div>
+                <h1 class="header-title">AutoDraw</h1>
+                <p class="header-subtitle">Advanced Drawing Processing Suite</p>
             </div>
           </div>
-
-          <div class="form-group">
-            <label for="legend_file" class="form-label">Legend File (Optional - XLSX, CSV)</label>
-            <div class="file-input-wrapper">
-              <input type="file" name="legend_file" id="legend_file" accept=".xlsx,.xls,.csv" class="file-input">
-            </div>
-          </div>
-
-          <button type="submit" class="submit-button">
-            <span class="button-icon">⚡</span>
-            Extract Instruments
-          </button>
-        </form>
-      </div>
-
-      <!-- Processing Indicator -->
-      <div id="processingIndicator" class="processing-indicator">
-        <div class="processing-icon">⚡</div>
-        <h3 class="processing-title">Processing Your Files</h3>
-        <p class="processing-description">Please wait while we extract instruments from your P&ID files...</p>
-        
-        <div class="progress-bar">
-          <div class="progress-fill"></div>
+          <!-- Company Logo - now directly within header-section -->
+          <img src="/static/bilfinger_logo.png" onerror="this.onerror=null;this.src='https://placehold.co/150x50/000000/FFFFFF?text=BILFINGER+LOGO';" alt="Bilfinger Logo" class="company-logo-img">
         </div>
-        <p style="color: var(--secondary-slate); font-size: 0.875rem;">Processing in progress...</p>
-      </div>
 
-      <!-- Results Downloads -->
-      {% if output_file or debug_image_link %}
-        <div class="results-section">
-          <div class="results-icon">✅</div>
-          <h3 class="results-title">Your Results Are Ready!</h3>
+        <!-- Message Display -->
+        <div id="messageDisplay" class="message" style="display: none;">
+          <div class="message-icon"></div>
+          <span id="messageText"></span>
+        </div>
+
+        <!-- Modules Dashboard (Initial View) -->
+        <div id="modulesDashboard" class="modules-dashboard">
+            <!-- P&ID Instrument Extraction Tile -->
+            <div id="pidExtractionTile" class="module-card active" title="Click to start P&ID Instrument Extraction">
+                <div class="module-icon">
+                    <!-- P&ID Icon: Document with magnifying glass -->
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="10" cy="14" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12.5 16.5L14 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="module-title">P&ID Instrument Extraction</h3>
+                <p class="module-description">
+                    Automate the extraction of instrument tags and data from P&ID drawings.
+                </p>
+                <button class="module-action-button">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17 3L21 7L8 20L4 16L17 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M15 5L19 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M10 14L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="6" cy="18" r="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M6 16V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M4 18H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Launch Module
+                </button>
+            </div>
+
+            <!-- Cable Extractor Tile (Coming Soon) -->
+            <div class="module-card coming-soon" title="Cable Extractor - Coming Soon">
+                <div class="module-icon">
+                    <!-- Cable Icon: Stylized cable/wire -->
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 5V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 19V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="module-title">Cable Extractor</h3>
+                <p class="module-description">
+                    Streamline cable schedule generation and cable routing from electrical drawings.
+                </p>
+                <div class="coming-soon-badge">
+                  <span>⏳</span>
+                  Coming Soon
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Form (Hidden initially, shown after clicking P&ID tile) -->
+        <div id="uploadForm" class="upload-form" style="display: none;">
+          <h2 class="form-title">Upload Your P&ID Files</h2>
+          <p class="processing-description" style="margin-bottom: 1.5rem;">
+              Select your P&ID PDF files (up to 50) and an optional legend file.
+              The legend helps validate instrument types for more accurate results.
+          </p>
           
-          <div class="download-buttons">
-            {% if output_file %}
-              <a href="{{ url_for('uploaded_file', filename=output_file) }}" class="download-link">
-                <span>📥</span>
-                Download {{ output_file }}
-              </a>
-            {% endif %}
-            {% if debug_image_link %}
-              <a href="{{ debug_image_link }}" class="download-link debug">
-                <span>📥</span>
-                Download Debug Image
-              </a>
-            {% endif %}
-          </div>
+          <form id="uploadFormElement" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="pid_file" class="form-label">P&ID Files (PDF, Max 50 files)</label>
+              <div class="file-input-wrapper">
+                <input type="file" name="pid_file" id="pid_file" accept=".pdf" multiple required class="file-input" title="Select P&ID PDF files">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="legend_file" class="form-label">Legend File (Optional - XLSX, CSV)</label>
+              <div class="file-input-wrapper">
+                <input type="file" name="legend_file" id="legend_file" accept=".xlsx,.xls,.csv" class="file-input" title="Select an optional legend file for instrument type validation">
+              </div>
+            </div>
+
+            <button type="submit" class="submit-button" title="Click to start instrument extraction">
+              <span class="button-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17 3L21 7L8 20L4 16L17 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M15 5L19 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M10 14L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="6" cy="18" r="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M6 16V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M4 18H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+              </span>
+              Extract Instruments
+            </button>
+          </form>
         </div>
-      {% endif %}
+
+        <!-- Processing Indicator -->
+        <div id="processingIndicator" class="processing-indicator" style="display: none;">
+          <div class="progress-bar-container">
+              <div class="progress-bar-indeterminate"></div>
+          </div>
+          <p>Processing P&ID files, please wait...</p>
+          <div class="processing-image-placeholder">
+              <img src="https://placehold.co/200x150/e2e8f0/64748b?text=P%26ID+Scanning" alt="P&ID Scanning Placeholder">
+          </div>
+          <p style="color: var(--secondary-slate); font-size: 0.875rem; margin-top: -1rem; margin-bottom: 1rem;">Analyzing diagrams and performing OCR...</p>
+        </div>
+
+        <!-- Results Downloads -->
+          <div id="resultsSection" class="results-section" style="display: none;">
+            <div class="results-icon">✅</div>
+            <h3 class="results-title">Extraction Complete! Your Results Are Ready.</h3>
+            
+              <p class="processing-description" style="margin-bottom: 1rem;">
+                  Here's a preview of the extracted instrument data:
+              </p>
+              <div class="results-table-container">
+                  <!-- Table will be injected here by JavaScript -->
+              </div>
+
+            <p class="processing-description" style="margin-top: 1.5rem;">
+                Download the full instrument index and debug images below:
+            </p>
+            <div class="download-buttons">
+                <a id="outputFileLink" href="#" class="download-link" title="Download the generated Excel/CSV file with all extracted instruments" style="display: none;">
+                  <span>📥</span>
+                  Download Output File
+                </a>
+                <a id="debugImageLink" href="#" class="download-link debug" title="Download the P&ID image with detected circles and OCR annotations for debugging" style="display: none;">
+                  <span>🔍</span>
+                  Download Debug Image
+                </a>
+              <!-- New "Go Back" button -->
+              <button id="backToDashboardButton" class="back-button" title="Go back to the main dashboard">
+                <span>🏠</span>
+                Back to Dashboard
+              </button>
+            </div>
+          </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 3L21 7L8 20L4 16L17 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 5L19 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 14L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="6" cy="18" r="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6 16V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 18H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h4 class="footer-title">Developed by</h4>
+        
+        <div class="footer-content">
+          <p class="footer-name">Prashanth Thipparthi</p>
+          <p>Instrumentation Department</p>
+          <p class="footer-company">Bilfinger Tebodin Middle East</p>
+        </div>
+      </footer>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-icon">⚡</div>
-      <h4 class="footer-title">Developed by</h4>
-      
-      <div class="footer-content">
-        <p class="footer-name">Prashanth Thipparthi</p>
-        <p class="footer-position">Senior Engineer</p>
-        <p>Instrumentation Department</p>
-        <p class="footer-company">Bilfinger Tebodin Middle East</p>
-      </div>
-    </footer>
-
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', function() {
-            // Hide the form
-            this.style.display = 'none';
-            // Show the processing indicator
-            document.getElementById('processingIndicator').style.display = 'block';
-            // Hide previous messages and download links
-            const messages = document.querySelectorAll('.message');
-            messages.forEach(msg => msg.style.display = 'none');
-            const resultsSection = document.querySelector('.results-section');
-            if (resultsSection) {
-                resultsSection.style.display = 'none';
-            }
+        // Get references to key elements
+        const modulesDashboard = document.getElementById('modulesDashboard');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadFormElement = document.getElementById('uploadFormElement'); // The actual form tag
+        const processingIndicator = document.getElementById('processingIndicator');
+        const resultsSection = document.getElementById('resultsSection');
+        const backToDashboardButton = document.getElementById('backToDashboardButton');
+        const pidExtractionTile = document.getElementById('pidExtractionTile');
+        const outputFileLink = document.getElementById('outputFileLink');
+        const debugImageLink = document.getElementById('debugImageLink');
+        const pidFileInput = document.getElementById('pid_file'); // Reference to the P&ID file input
+        const messageDisplay = document.getElementById('messageDisplay');
+        const messageText = document.getElementById('messageText');
+        const messageIcon = messageDisplay.querySelector('.message-icon');
+
+        // Helper function to show/hide messages
+        function showMessage(message, isError = false) {
+            messageText.textContent = message;
+            messageDisplay.className = `message ${isError ? 'error' : 'success'}`;
+            messageIcon.innerHTML = isError ? '❌' : '✅';
+            messageDisplay.style.display = 'flex';
+        }
+
+        function hideMessage() {
+            messageDisplay.style.display = 'none';
+        }
+
+        // Function to reset the UI to the initial state (showing modules dashboard)
+        function resetUI() {
+            modulesDashboard.style.display = 'flex';
+            uploadForm.style.display = 'none';
+            processingIndicator.style.display = 'none';
+            resultsSection.style.display = 'none';
+            hideMessage();
+            // Reset file inputs
+            pidFileInput.value = '';
+            document.getElementById('legend_file').value = '';
+            // Hide download links when resetting
+            if (outputFileLink) outputFileLink.style.display = 'none';
+            if (debugImageLink) debugImageLink.style.display = 'none';
+        }
+
+        // Event listener for the "P&ID Instrument Extraction" tile
+        pidExtractionTile.addEventListener('click', function() {
+            console.log('P&ID Extraction tile clicked. Showing upload form.'); // Debug log
+            modulesDashboard.style.display = 'none';
+            uploadForm.style.display = 'flex';
+            hideMessage(); // Hide any previous messages
         });
 
-        // Handle page load states
-        document.addEventListener('DOMContentLoaded', function() {
-            const messageDiv = document.querySelector('.message');
-            const resultsSection = document.querySelector('.results-section');
-            const processingIndicator = document.getElementById('processingIndicator');
-            const uploadForm = document.querySelector('.upload-form');
+        // Event listener for the "Back to Dashboard" button in results
+        if (backToDashboardButton) {
+            backToDashboardButton.addEventListener('click', resetUI);
+        }
 
-            if (messageDiv || resultsSection) {
-                // If a message or results are present, hide the processing indicator
-                processingIndicator.style.display = 'none';
-                // Show the form again to allow new uploads
-                uploadForm.style.display = 'block';
-            } else {
-                // Initial page load - ensure form is visible and indicator is hidden
-                uploadForm.style.display = 'block';
-                processingIndicator.style.display = 'none';
-            }
-        });
+        // Event listener for the form submission (AJAX)
+        uploadFormElement.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+            console.log('Form submission intercepted. Displaying processing indicator...'); // Debug log
 
-        // Add smooth scrolling for module cards
-        document.querySelectorAll('.module-card.active').forEach(card => {
-            card.addEventListener('click', function() {
-                document.getElementById('uploadForm').scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+            hideMessage(); // Hide any previous messages
+            uploadForm.style.display = 'none'; // Hide upload form
+            processingIndicator.style.display = 'flex'; // Show processing indicator
+            resultsSection.style.display = 'none'; // Hide results section
+
+            const formData = new FormData(this); // 'this' refers to the form element
+            console.log('Sending AJAX request to /upload...'); // Debug log
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
                 });
-            });
+                console.log('Received response from /upload.'); // Debug log
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'An unknown error occurred during upload.');
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data); // Debug log
+
+                // Update results section with data
+                if (data.table) {
+                    const tableContainer = resultsSection.querySelector('.results-table-container');
+                    if (tableContainer) {
+                        tableContainer.innerHTML = data.table;
+                    }
+                }
+
+                if (data.output_file) {
+                    if (outputFileLink) {
+                        outputFileLink.href = `/uploads/${data.output_file}`;
+                        outputFileLink.textContent = `📥 Download ${data.output_file}`;
+                        outputFileLink.style.display = 'inline-flex';
+                    }
+                } else {
+                    if (outputFileLink) outputFileLink.style.display = 'none';
+                }
+
+                if (data.debug_image_link) {
+                    if (debugImageLink) {
+                        debugImageLink.href = data.debug_image_link;
+                        debugImageLink.style.display = 'inline-flex';
+                    }
+                } else {
+                    if (debugImageLink) debugImageLink.style.display = 'none';
+                }
+                
+                // Show success message and results
+                showMessage(data.message || 'Instruments extracted successfully!');
+                processingIndicator.style.display = 'none';
+                resultsSection.style.display = 'flex';
+                console.log('Processing complete. Displaying results.'); // Debug log
+
+            } catch (error) {
+                console.error('Error during file upload:', error); // Debug log
+                showMessage(error.message || 'An error occurred during processing.', true);
+                processingIndicator.style.display = 'none';
+                uploadForm.style.display = 'flex'; // Show form again on error
+            }
+        });
+
+        // Handle initial page load states
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded event fired.'); // Debug log
+            // Check if there's a message or results present from a server-side render
+            // This part is crucial for handling initial page load or redirects from Flask
+            const serverMessageDiv = document.querySelector('.message'); // Check for server-rendered message
+            const hasServerRenderedResults = resultsSection && resultsSection.innerHTML.trim() !== '' && resultsSection.style.display !== 'none';
+
+            if (serverMessageDiv && serverMessageDiv.textContent.trim() !== '') {
+                // If a message was rendered by the server (e.g., after a Flask redirect)
+                // We need to re-display it using our JS function to ensure consistency
+                const isError = serverMessageDiv.classList.contains('error');
+                showMessage(serverMessageDiv.textContent.trim(), isError);
+                serverMessageDiv.style.display = 'none'; // Hide the original server-rendered div
+                modulesDashboard.style.display = 'none';
+                uploadForm.style.display = 'none';
+                processingIndicator.style.display = 'none';
+                resultsSection.style.display = 'none'; // Ensure results are hidden if only message
+            } else if (hasServerRenderedResults) {
+                // If results were rendered by the server (e.g., after a successful Flask redirect)
+                modulesDashboard.style.display = 'none';
+                uploadForm.style.display = 'none';
+                processingIndicator.style.display = 'none';
+                resultsSection.style.display = 'flex';
+                hideMessage(); // Hide any old messages
+            } else {
+                // Initial page load with no messages or results - show modules dashboard
+                resetUI(); // Ensures everything is hidden except the dashboard
+            }
+            console.log('Initial UI state set.'); // Debug log
         });
     </script>
   </body>
